@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Arrivals - Primevy Luxury</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #C19A6B;
+            --secondary: #1a1a1a;
+            --accent: #D4AF37;
+            --light: #f8f8f8;
+            --dark: #0a0a0a;
+            --text: #e5e5e5;
+            --text-light: #a0a0a0;
+            --platinum: #e5e5e5;
+            --champagne: #f7efdc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .font-luxury {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(193, 154, 107, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 40px 0;
+        }
+
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+        }
+
+        /* Product Card */
+        .product-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(10, 10, 10, 0.95) 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(193, 154, 107, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(193, 154, 107, 0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        @media (max-width: 768px) {
+            .product-image {
+                height: 150px;
+            }
+            
+            .product-card {
+                border-radius: 12px;
+            }
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.08);
+        }
+
+        /* New Arrival Badge */
+        .new-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: linear-gradient(135deg, var(--accent) 0%, #ffd700 100%);
+            color: var(--dark);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            z-index: 10;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Utility Classes */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .bg-gradient-premium {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 100%);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: var(--dark);
+            font-weight: 600;
+            padding: 14px 36px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(193, 154, 107, 0.3);
+        }
+
+        /* Filters */
+        .filter-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 20px;
+            background: rgba(193, 154, 107, 0.1);
+            border: 1px solid rgba(193, 154, 107, 0.3);
+            border-radius: 20px;
+            font-size: 0.95rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background: var(--primary);
+            color: var(--dark);
+            border-color: var(--primary);
+        }
+        
+        .filter-btn:hover {
+            background: rgba(193, 154, 107, 0.2);
+            color: var(--text);
+        }
+
+        /* Navigation */
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Price Styling */
+        .price-current {
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--primary);
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .price-original {
+            font-size: 16px;
+            color: var(--text-light);
+            text-decoration: line-through;
+        }
+
+        @media (max-width: 768px) {
+            .price-current {
+                font-size: 18px;
+            }
+            
+            .price-original {
+                font-size: 12px;
+            }
+        }
+
+        /* Rating Stars */
+        .rating-stars {
+            color: var(--accent);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .rating-stars {
+                font-size: 12px;
+            }
+        }
+
+        /* Cart Badge */
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent);
+            color: var(--dark);
+            font-size: 12px;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-badge.pulse {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 20px 28px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--dark) 100%);
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            z-index: 1001;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(193, 154, 107, 0.2);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(193, 154, 107, 0.1) 0%, rgba(212, 175, 55, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-state-icon i {
+            font-size: 36px;
+            color: var(--primary);
+        }
+
+        /* Month Indicator */
+        .month-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 20px;
+            background: rgba(193, 154, 107, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(193, 154, 107, 0.2);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .month-indicator i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div class="flex items-center space-x-4">
+            <i class="fas fa-check-circle text-green-400 text-xl"></i>
+            <span id="notification-message" class="font-medium">Product added to cart!</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar-luxury shadow-lg sticky top-0 z-50 bg-dark/95 backdrop-blur-sm border-b border-primary/10">
+        <div class="nav-container">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="index.html" class="text-3xl font-bold font-luxury text-gradient tracking-tight">PRIMEVY</a>
+                    <span class="ml-3 text-xs text-accent uppercase tracking-[0.2em] hidden md:inline font-light">LUXURY</span>
+                </div>
+
+                <!-- Right Menu -->
+                <div class="flex items-center space-x-6">
+                    <!-- Wishlist -->
+                    <a href="wishlist.html" class="text-gray-300 hover:text-primary transition-colors relative">
+                        <i class="fas fa-heart text-xl"></i>
+                        <span class="cart-badge">3</span>
+                    </a>
+                    
+                    <!-- Cart -->
+                    <a href="cart.html" id="cart-link" class="text-gray-300 hover:text-primary transition-colors relative">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-badge" class="cart-badge">0</span>
+                    </a>
+                    
+                    <!-- Account -->
+                    <div class="relative">
+                        <button id="account-button" class="text-gray-300 hover:text-primary transition-colors flex items-center gap-2">
+                            <div class="w-9 h-9 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center">
+                                <i class="fas fa-user text-dark text-sm"></i>
+                            </div>
+                            <span class="hidden md:inline font-medium">Account</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- New Arrivals Header -->
+    <section class="py-16 bg-gradient-premium">
+        <div class="nav-container">
+            <div class="text-center max-w-4xl mx-auto">
+                <div class="inline-flex items-center mb-6">
+                    <span class="month-indicator">
+                        <i class="fas fa-calendar-star"></i>
+                        <span id="current-month">Loading...</span>
+                    </span>
+                </div>
+                
+                <h1 class="text-4xl md:text-6xl font-luxury font-bold mb-6">
+                    <span class="text-gradient">New Arrivals</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-gray-300 mb-8 leading-relaxed">
+                    Discover our latest luxury additions, handpicked and freshly curated for the discerning collector.
+                    Each piece represents the pinnacle of craftsmanship and design.
+                </p>
+                
+                <div class="flex flex-wrap justify-center gap-4 mt-8">
+                    <div class="text-center px-6 py-3">
+                        <div class="text-2xl font-serif font-bold text-primary" id="total-products">0</div>
+                        <div class="text-sm text-gray-400 mt-1">New Products</div>
+                    </div>
+                    <div class="text-center px-6 py-3">
+                        <div class="text-2xl font-serif font-bold text-primary" id="total-categories">0</div>
+                        <div class="text-sm text-gray-400 mt-1">Categories</div>
+                    </div>
+                    <div class="text-center px-6 py-3">
+                        <div class="text-2xl font-serif font-bold text-primary" id="avg-discount">0%</div>
+                        <div class="text-sm text-gray-400 mt-1">Avg. Discount</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="py-8 bg-dark border-t border-primary/10">
+        <div class="nav-container">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-luxury font-semibold mb-2">Filter by Category</h2>
+                    <p class="text-gray-400 text-sm">Explore our latest arrivals by category</p>
+                </div>
+                
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-category="all">All Arrivals</button>
+                    <button class="filter-btn" data-category="jewellery">Jewellery</button>
+                    <button class="filter-btn" data-category="Men's-Fashion">Men's Fashion</button>
+                    <button class="filter-btn" data-category="Women's-Fashion">Women's Fashion</button>
+                    <button class="filter-btn" data-category="Accessories">Accessories</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Arrivals Products -->
+    <section class="py-12 bg-dark">
+        <div class="nav-container">
+            <!-- Loading State -->
+            <div id="products-loading" class="flex justify-center items-center py-20">
+                <div class="text-center">
+                    <div class="spinner mx-auto mb-4"></div>
+                    <p class="text-gray-400">Loading new arrivals...</p>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="products-container" class="product-grid" style="display: none;">
+                <!-- Products will be loaded here from Firebase -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="products-empty" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <h3 class="text-2xl font-luxury font-bold mb-3">No New Arrivals Yet</h3>
+                <p class="text-gray-400 max-w-md mx-auto mb-8">
+                    Our artisans are preparing exquisite new pieces. Check back soon for our latest additions.
+                </p>
+                <a href="index.html" class="btn-primary inline-block">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Home
+                </a>
+            </div>
+
+            <!-- Recently Added Section -->
+            <div id="recently-added-section" style="display: none;">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-luxury font-bold mb-2">Recently Added</h2>
+                        <p class="text-gray-400">Products added in the last 30 days</p>
+                    </div>
+                    <div id="recent-count" class="text-primary font-bold text-xl"></div>
+                </div>
+                
+                <div id="recent-products" class="product-grid">
+                    <!-- Recently added products -->
+                </div>
+            </div>
+
+            <!-- Coming Soon Section -->
+            <div id="coming-soon-section" style="display: none;" class="mt-16 pt-12 border-t border-primary/10">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl md:text-3xl font-luxury font-bold mb-4">
+                        <span class="text-gradient">Coming Soon</span>
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        Stay tuned for our upcoming luxury collections. Be the first to experience innovation and elegance.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center p-8 bg-gradient-premium rounded-xl border border-primary/10">
+                        <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-r from-primary/20 to-accent/20 flex items-center justify-center">
+                            <i class="fas fa-crown text-2xl text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-luxury font-semibold mb-3">Exclusive Preview</h3>
+                        <p class="text-gray-400">Get early access to limited edition pieces before they're released to the public.</p>
+                    </div>
+                    
+                    <div class="text-center p-8 bg-gradient-premium rounded-xl border border-primary/10">
+                        <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-r from-primary/20 to-accent/20 flex items-center justify-center">
+                            <i class="fas fa-bell text-2xl text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-luxury font-semibold mb-3">Notify Me</h3>
+                        <p class="text-gray-400">Subscribe to receive notifications when new products in your favorite categories arrive.</p>
+                        <button class="mt-4 px-6 py-2 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors">
+                            <i class="fas fa-envelope mr-2"></i> Subscribe
+                        </button>
+                    </div>
+                    
+                    <div class="text-center p-8 bg-gradient-premium rounded-xl border border-primary/10">
+                        <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-r from-primary/20 to-accent/20 flex items-center justify-center">
+                            <i class="fas fa-calendar-alt text-2xl text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-luxury font-semibold mb-3">Launch Calendar</h3>
+                        <p class="text-gray-400">Mark your calendar for upcoming collection launches and exclusive events.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-20 bg-gradient-premium">
+        <div class="nav-container">
+            <div class="max-w-2xl mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-luxury font-bold mb-6">Be First to Experience New Luxury</h2>
+                <p class="text-gray-400 mb-10 text-lg">
+                    Join our inner circle to receive exclusive previews of new arrivals and limited edition releases.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                    <input type="email" 
+                           placeholder="Your preferred email" 
+                           class="w-full px-6 py-3 bg-dark/50 border border-primary/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-colors">
+                    <button class="btn-primary px-8">
+                        <i class="fas fa-gem mr-2"></i> Join Exclusive
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer py-16 bg-dark border-t border-primary/10">
+        <div class="nav-container">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <!-- Brand -->
+                <div>
+                    <a href="index.html" class="text-3xl font-luxury font-bold text-gradient tracking-tight mb-6 inline-block">PRIMEVY</a>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        Redefining luxury through curated excellence since 2015.
+                    </p>
+                </div>
+
+                <!-- Collections -->
+                <div>
+                    <h3 class="font-luxury text-xl font-semibold mb-6 text-primary">Collections</h3>
+                    <ul class="space-y-3">
+                        <li><a href="new-arrivals.html" class="text-gray-400 hover:text-primary transition-colors">New Arrivals</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Limited Editions</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Private Sale</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Archive Collection</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h3 class="font-luxury text-xl font-semibold mb-6 text-primary">Services</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Personal Shopping</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Concierge Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Worldwide Shipping</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Authentication</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h3 class="font-luxury text-xl font-semibold mb-6 text-primary">Contact</h3>
+                    <ul class="space-y-4">
+                        <li class="text-gray-400 flex items-start gap-3">
+                            <i class="fas fa-phone text-primary mt-1"></i>
+                            <div>
+                                <div class="font-medium">Concierge</div>
+                                <div>+1 (888) LUX-PRIME</div>
+                            </div>
+                        </li>
+                        <li class="text-gray-400 flex items-start gap-3">
+                            <i class="fas fa-envelope text-primary mt-1"></i>
+                            <div>
+                                <div class="font-medium">Email</div>
+                                <div>concierge@primevy.com</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="border-t border-primary/10 pt-12">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="text-gray-400 text-sm mb-6 md:mb-0">
+                        &copy; 2015-2024 Primevy Luxury. All rights reserved.
+                    </div>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#" class="text-gray-400 hover:text-primary text-sm transition-colors">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-primary text-sm transition-colors">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-primary text-sm transition-colors">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBdig0navZd6v-W57ZIaKstQ_M7DushGjw",
+            authDomain: "prime-e6e11.firebaseapp.com",
+            databaseURL: "https://prime-e6e11-default-rtdb.firebaseio.com",
+            projectId: "prime-e6e11",
+            storageBucket: "prime-e6e11.firebasestorage.app",
+            messagingSenderId: "496246501275",
+            appId: "1:496246501275:web:f313ea73269ae51f7ffb3e",
+            measurementId: "G-E5ZXVC6JGQ"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // State
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let currentUser = null;
+        let allProducts = [];
+        let newArrivals = [];
+        let currentFilter = 'all';
+
+        // DOM Elements
+        const productsContainer = document.getElementById('products-container');
+        const productsLoading = document.getElementById('products-loading');
+        const productsEmpty = document.getElementById('products-empty');
+        const cartBadge = document.getElementById('cart-badge');
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notification-message');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const currentMonthElement = document.getElementById('current-month');
+        const totalProductsElement = document.getElementById('total-products');
+        const totalCategoriesElement = document.getElementById('total-categories');
+        const avgDiscountElement = document.getElementById('avg-discount');
+        const recentProductsContainer = document.getElementById('recent-products');
+        const recentCountElement = document.getElementById('recent-count');
+        const recentlyAddedSection = document.getElementById('recently-added-section');
+        const comingSoonSection = document.getElementById('coming-soon-section');
+
+        // Current month name
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        const currentDate = new Date();
+        const currentMonth = months[currentDate.getMonth()];
+        const currentYear = currentDate.getFullYear();
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAuth();
+            setupEventListeners();
+            updateCurrentMonth();
+            loadNewArrivals();
+            updateCartCount();
+        });
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Filter buttons
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    button.classList.add('active');
+                    
+                    currentFilter = button.getAttribute('data-category');
+                    filterProducts(currentFilter);
+                });
+            });
+        }
+
+        // Update current month display
+        function updateCurrentMonth() {
+            if (currentMonthElement) {
+                currentMonthElement.textContent = `${currentMonth} ${currentYear}`;
+            }
+        }
+
+        // Load New Arrivals from Firebase
+        async function loadNewArrivals() {
+            try {
+                console.log('Loading new arrivals from Firebase...');
+                
+                // Reference to products node
+                const productsRef = database.ref('products');
+                
+                // Fetch data once
+                productsRef.once('value').then((snapshot) => {
+                    const productsData = snapshot.val();
+                    
+                    // Hide loading indicator
+                    if (productsLoading) {
+                        productsLoading.style.display = 'none';
+                    }
+                    
+                    if (productsData) {
+                        // Convert object to array with keys
+                        const productsArray = Object.keys(productsData).map(key => ({
+                            key: key,
+                            ...productsData[key]
+                        }));
+                        
+                        console.log(`Loaded ${productsArray.length} products from Firebase`);
+                        
+                        // Store all products
+                        allProducts = productsArray;
+                        
+                        // Filter new arrivals based on added-date
+                        filterNewArrivals(productsArray);
+                        
+                        // Calculate and display stats
+                        calculateStats(newArrivals);
+                        
+                        // Render new arrivals
+                        renderNewArrivals(newArrivals);
+                        
+                        // Filter for recently added (last 30 days)
+                        filterRecentlyAdded(productsArray);
+                        
+                        // Show products container
+                        if (productsContainer) {
+                            productsContainer.style.display = 'grid';
+                        }
+                        
+                        // Show coming soon section
+                        if (comingSoonSection) {
+                            comingSoonSection.style.display = 'block';
+                        }
+                    } else {
+                        console.log('No products found in Firebase');
+                        // Show empty state
+                        if (productsEmpty) {
+                            productsEmpty.style.display = 'block';
+                        }
+                    }
+                }).catch((error) => {
+                    console.error('Error loading new arrivals:', error);
+                    if (productsLoading) {
+                        productsLoading.style.display = 'none';
+                    }
+                    if (productsEmpty) {
+                        productsEmpty.style.display = 'block';
+                    }
+                    showNotification('Error loading new arrivals. Please try again.', 'error');
+                });
+                
+            } catch (error) {
+                console.error('Unexpected error:', error);
+                if (productsLoading) {
+                    productsLoading.style.display = 'none';
+                }
+                if (productsEmpty) {
+                    productsEmpty.style.display = 'block';
+                }
+                showNotification('Error connecting to database.', 'error');
+            }
+        }
+
+        // Filter new arrivals based on added-date
+        function filterNewArrivals(productsArray) {
+            // Get current month and year
+            const currentMonthYear = `${currentMonth}-${currentYear}`;
+            
+            // Filter products added in current month or recent months
+            newArrivals = productsArray.filter(product => {
+                if (!product['added-date']) return false;
+                
+                const addedDate = product['added-date'];
+                // Parse the date (assuming format DD-MM-YYYY)
+                const [day, month, year] = addedDate.split('-').map(Number);
+                
+                // Check if added in current year
+                if (year === currentYear) {
+                    // Check if added in current month or previous 2 months
+                    const productMonth = months[month - 1]; // Convert month number to name
+                    const currentMonthIndex = months.indexOf(currentMonth);
+                    
+                    // Products from current month or previous 2 months
+                    if (month >= currentMonthIndex - 1 && month <= currentMonthIndex + 1) {
+                        return true;
+                    }
+                }
+                
+                return false;
+            });
+            
+            // Sort by added date (newest first)
+            newArrivals.sort((a, b) => {
+                const dateA = parseDate(a['added-date']);
+                const dateB = parseDate(b['added-date']);
+                return dateB - dateA; // Newest first
+            });
+            
+            console.log(`Found ${newArrivals.length} new arrivals`);
+        }
+
+        // Filter recently added (last 30 days)
+        function filterRecentlyAdded(productsArray) {
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            
+            const recentlyAdded = productsArray.filter(product => {
+                if (!product['added-date']) return false;
+                
+                const addedDate = parseDate(product['added-date']);
+                return addedDate >= thirtyDaysAgo;
+            });
+            
+            if (recentlyAdded.length > 0) {
+                // Sort by date (newest first)
+                recentlyAdded.sort((a, b) => {
+                    const dateA = parseDate(a['added-date']);
+                    const dateB = parseDate(b['added-date']);
+                    return dateB - dateA;
+                });
+                
+                // Show section
+                recentlyAddedSection.style.display = 'block';
+                recentCountElement.textContent = `${recentlyAdded.length} items`;
+                
+                // Render products (limit to 6)
+                const limitedRecent = recentlyAdded.slice(0, 6);
+                renderProducts(limitedRecent, recentProductsContainer);
+            }
+        }
+
+        // Parse date from DD-MM-YYYY format
+        function parseDate(dateString) {
+            if (!dateString) return new Date(0);
+            
+            const [day, month, year] = dateString.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
+
+        // Calculate statistics
+        function calculateStats(products) {
+            if (products.length === 0) return;
+            
+            // Total products
+            totalProductsElement.textContent = products.length;
+            
+            // Unique categories
+            const categories = [...new Set(products.map(p => p.category))].filter(Boolean);
+            totalCategoriesElement.textContent = categories.length;
+            
+            // Average discount
+            const productsWithDiscount = products.filter(p => p.originalPrice && p.price);
+            if (productsWithDiscount.length > 0) {
+                const totalDiscount = productsWithDiscount.reduce((sum, product) => {
+                    const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+                    return sum + discount;
+                }, 0);
+                
+                const avgDiscount = Math.round(totalDiscount / productsWithDiscount.length);
+                avgDiscountElement.textContent = `${avgDiscount}%`;
+            } else {
+                avgDiscountElement.textContent = '0%';
+            }
+        }
+
+        // Render new arrivals
+        function renderNewArrivals(productsArray) {
+            if (!productsContainer) return;
+            
+            if (productsArray.length === 0) {
+                productsContainer.style.display = 'none';
+                productsEmpty.style.display = 'block';
+                return;
+            }
+            
+            productsEmpty.style.display = 'none';
+            productsContainer.innerHTML = '';
+            
+            productsArray.forEach(product => {
+                const productCard = createProductCard(product);
+                productsContainer.appendChild(productCard);
+            });
+        }
+
+        // Render products to specified container
+        function renderProducts(productsArray, container) {
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            productsArray.forEach(product => {
+                const productCard = createProductCard(product);
+                container.appendChild(productCard);
+            });
+        }
+
+        // Filter products by category
+        function filterProducts(category) {
+            if (category === 'all') {
+                renderNewArrivals(newArrivals);
+                calculateStats(newArrivals);
+            } else {
+                const filtered = newArrivals.filter(product => 
+                    product.category && product.category.toLowerCase() === category.toLowerCase()
+                );
+                renderNewArrivals(filtered);
+                calculateStats(filtered);
+            }
+        }
+
+        // Create product card HTML
+        function createProductCard(product) {
+            const discount = product.originalPrice && product.price ? 
+                Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
+            
+            // Calculate how many days ago it was added
+            const addedDate = parseDate(product['added-date']);
+            const daysAgo = Math.floor((new Date() - addedDate) / (1000 * 60 * 60 * 24));
+            const isVeryNew = daysAgo <= 7;
+            
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            productCard.setAttribute('data-id', product.key);
+            
+            // Format price for display
+            const formattedPrice = typeof product.price === 'number' 
+                ? product.price.toLocaleString() 
+                : product.price;
+            const formattedOriginalPrice = product.originalPrice ? 
+                (typeof product.originalPrice === 'number' ? product.originalPrice.toLocaleString() : product.originalPrice) 
+                : '';
+            
+            // Format added date
+            const formattedDate = product['added-date'] ? 
+                formatDateDisplay(product['added-date']) : 'Recently Added';
+            
+            productCard.innerHTML = `
+                <div class="relative">
+                    <img src="${product.image || 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}" 
+                         alt="${product.name}" 
+                         class="product-image">
+                    
+                    <!-- New Arrival Badge -->
+                    <div class="new-badge">
+                        ${isVeryNew ? 'Just In!' : 'New'}
+                    </div>
+                    
+                    ${discount > 0 ? `<div class="absolute top-4 right-4">
+                        <span class="discount-badge">${discount}% OFF</span>
+                    </div>` : ''}
+                </div>
+                
+                <div class="p-4 md:p-6">
+                    <div class="flex items-center text-xs text-gray-400 mb-2">
+                        <i class="fas fa-calendar-alt mr-1"></i>
+                        <span>Added ${formattedDate}</span>
+                    </div>
+                    
+                    <h3 class="font-luxury text-lg md:text-xl font-semibold mb-2 md:mb-3 line-clamp-2">${product.name}</h3>
+                    
+                    <div class="flex items-center mb-3 md:mb-4">
+                        <div class="rating-stars">
+                            ${generateStarRating(product.rating || 0)}
+                        </div>
+                        <span class="text-xs md:text-sm text-gray-400 ml-2 md:ml-3">
+                            (${product.reviews || 0}${product.reviews ? ' reviews' : ''})
+                        </span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="price-current">₹${formattedPrice}</div>
+                            ${formattedOriginalPrice ? `<div class="price-original">₹${formattedOriginalPrice}</div>` : ''}
+                        </div>
+                        <button class="add-to-cart bg-primary text-dark p-2 md:p-3 rounded-full hover:bg-accent transition-all" data-id="${product.key}">
+                            <i class="fas fa-shopping-cart text-sm md:text-base"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners for product click
+            productCard.addEventListener('click', (e) => {
+                if (!e.target.closest('.add-to-cart')) {
+                    // Redirect to product detail page
+                    const productId = product.key;
+                    if (productId) {
+                        window.location.href = `product-detail.html?id=${productId}`;
+                    }
+                }
+            });
+            
+            // Add to cart button
+            const addToCartBtn = productCard.querySelector('.add-to-cart');
+            if (addToCartBtn) {
+                addToCartBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    addToCart(product.key);
+                });
+            }
+            
+            return productCard;
+        }
+
+        // Format date for display
+        function formatDateDisplay(dateString) {
+            if (!dateString) return '';
+            
+            const [day, month, year] = dateString.split('-').map(Number);
+            const date = new Date(year, month - 1, day);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+            
+            return `${months[month - 1]} ${year}`;
+        }
+
+        // Generate Star Rating
+        function generateStarRating(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const emptyStars = 5 - Math.ceil(rating);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+
+        // Add product to cart
+        function addToCart(productId, quantity = 1) {
+            const product = allProducts.find(p => p.key === productId);
+            if (!product) return;
+            
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    id: product.key,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: quantity,
+                    addedDate: product['added-date']
+                });
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Update UI
+            updateCartCount();
+            showNotification(`${product.name} added to cart!`);
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            if (cartBadge) {
+                cartBadge.textContent = totalItems;
+                
+                // Add animation
+                cartBadge.classList.add('pulse');
+                setTimeout(() => {
+                    cartBadge.classList.remove('pulse');
+                }, 500);
+            }
+        }
+
+        // Show notification
+        function showNotification(message = 'Product added to cart!', type = 'success') {
+            if (notification && notificationMessage) {
+                notificationMessage.textContent = message;
+                
+                // Set icon based on type
+                const icon = notification.querySelector('i');
+                if (type === 'error') {
+                    icon.className = 'fas fa-exclamation-circle text-red-400 text-xl';
+                } else {
+                    icon.className = 'fas fa-check-circle text-green-400 text-xl';
+                }
+                
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Auth Functions
+        function initializeAuth() {
+            auth.onAuthStateChanged((user) => {
+                currentUser = user;
+                updateAuthUI();
+            });
+        }
+
+        function updateAuthUI() {
+            const accountButton = document.getElementById('account-button');
+            if (accountButton && currentUser) {
+                const name = currentUser.displayName || currentUser.email.split('@')[0];
+                accountButton.innerHTML = `
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center">
+                        <i class="fas fa-user text-dark text-sm"></i>
+                    </div>
+                    <span class="hidden md:inline font-medium">${name}</span>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

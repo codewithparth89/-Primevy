@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - Primevy Luxury</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #C19A6B;
+            --secondary: #1a1a1a;
+            --accent: #D4AF37;
+            --light: #f8f8f8;
+            --dark: #0a0a0a;
+            --text: #e5e5e5;
+            --text-light: #a0a0a0;
+            --platinum: #e5e5e5;
+            --champagne: #f7efdc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 80px; /* Space for checkout bar */
+        }
+
+        .font-luxury {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(193, 154, 107, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Navigation - FIXED HEIGHT FOR MOBILE */
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* FIXED: Mobile navigation height */
+        .navbar-luxury {
+            min-height: 60px; /* Reduced from 80px */
+        }
+
+        @media (min-width: 768px) {
+            .navbar-luxury {
+                min-height: 80px; /* Keep desktop height */
+            }
+        }
+
+        /* Cart Item Styles */
+        .cart-item {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(10, 10, 10, 0.95) 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(193, 154, 107, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .cart-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(193, 154, 107, 0.2);
+        }
+
+        /* Cart Badge */
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent);
+            color: var(--dark);
+            font-size: 12px;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-badge.pulse {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 20px 28px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--dark) 100%);
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            z-index: 1001;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(193, 154, 107, 0.2);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay:not(.hidden) {
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--dark) 100%);
+            border-radius: 20px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(193, 154, 107, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay:not(.hidden) .modal-content {
+            transform: scale(1);
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: var(--dark);
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(193, 154, 107, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            .btn-primary {
+                padding: 14px 36px;
+                font-size: 16px;
+            }
+        }
+
+        /* FIXED: Checkout Summary - POSITION CORRECTLY */
+        #checkout-summary {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.98) 0%, rgba(10, 10, 10, 0.98) 100%);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(193, 154, 107, 0.2);
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 40;
+            padding: 16px 20px;
+        }
+
+        /* Empty Cart */
+        .empty-cart {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .empty-cart-icon {
+            font-size: 5rem;
+            color: rgba(193, 154, 107, 0.3);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Quantity Controls */
+        .quantity-controls {
+            border: 1px solid rgba(193, 154, 107, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            display: inline-flex;
+        }
+
+        .quantity-btn {
+            background: rgba(193, 154, 107, 0.1);
+            border: none;
+            color: var(--primary);
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+        }
+
+        .quantity-btn:hover {
+            background: rgba(193, 154, 107, 0.2);
+        }
+
+        @media (min-width: 768px) {
+            .quantity-btn {
+                padding: 8px 16px;
+                min-width: 48px;
+            }
+        }
+
+        /* Remove Button */
+        .remove-btn {
+            color: rgba(239, 68, 68, 0.7);
+            transition: all 0.3s ease;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 16px;
+            padding: 8px;
+        }
+
+        .remove-btn:hover {
+            color: #ef4444;
+            transform: scale(1.1);
+        }
+
+        /* Text Gradient */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Mobile Footer - FIXED HEIGHT */
+        .bottom-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.98) 0%, rgba(10, 10, 10, 0.98) 100%);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 12px 0;
+            border-top: 1px solid rgba(193, 154, 107, 0.2);
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            height: 60px; /* Fixed height */
+        }
+
+        .bottom-footer a {
+            color: rgba(193, 154, 107, 0.8);
+            font-size: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bottom-footer a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .bottom-footer a.active {
+            color: var(--primary);
+        }
+
+        .bottom-footer a.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding-bottom: 120px; /* Space for checkout bar on mobile */
+            }
+            
+            .empty-cart-icon {
+                font-size: 4rem;
+            }
+            
+            .cart-item {
+                border-radius: 12px;
+                padding: 16px;
+            }
+            
+            /* Mobile navigation items spacing */
+            .navbar-luxury .flex.items-center.space-x-6 {
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .empty-cart-icon {
+                font-size: 3rem;
+            }
+            
+            .bottom-footer a {
+                font-size: 18px;
+            }
+            
+            /* Further reduce mobile header height */
+            .navbar-luxury {
+                min-height: 56px;
+            }
+            
+            .navbar-luxury .h-20 {
+                height: 56px;
+            }
+            
+            #checkout-summary {
+                padding: 12px 16px;
+            }
+        }
+
+        /* Product Image */
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .product-image {
+                height: 150px;
+            }
+        }
+        
+    </style>
+</head>
+
+<body class="bg-dark">
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div class="flex items-center space-x-4">
+            <i class="fas fa-check-circle text-green-400 text-xl"></i>
+            <span id="notification-message" class="font-medium">Product added to cart!</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar-luxury shadow-lg sticky top-0 z-50 bg-dark/95 backdrop-blur-sm border-b border-primary/10">
+        <div class="nav-container">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl md:text-3xl font-bold font-luxury text-gradient tracking-tight">PRIMEVY</a>
+                    <span class="ml-2 md:ml-3 text-xs text-accent uppercase tracking-[0.2em] hidden md:inline font-light">LUXURY</span>
+                </div>
+
+                <!-- Cart Title (Desktop) -->
+                <div class="hidden md:block">
+                    <h1 class="text-2xl font-luxury font-bold text-gradient">Your Cart</h1>
+                </div>
+
+                <!-- Right Menu -->
+                <div class="flex items-center space-x-4 md:space-x-6">
+                    <!-- Wishlist -->
+                    <a href="wishlist.html" class="text-gray-300 hover:text-primary transition-colors relative">
+                        <i class="fas fa-heart text-lg md:text-xl"></i>
+                        <span class="cart-badge">3</span>
+                    </a>
+                    
+                    <!-- Cart -->
+                    <a href="cart.html" id="cart-link" class="text-gray-300 hover:text-primary transition-colors relative">
+                        <i class="fas fa-shopping-cart text-lg md:text-xl"></i>
+                        <span id="cart-badge" class="cart-badge">0</span>
+                    </a>
+                    
+                    <!-- Account -->
+                    <div class="relative">
+                        <button id="account-button" class="text-gray-300 hover:text-primary transition-colors flex items-center gap-2">
+                            <div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center">
+                                <i class="fas fa-user text-dark text-xs md:text-sm"></i>
+                            </div>
+                            <span class="hidden md:inline font-medium">Account</span>
+                        </button>
+                        <div id="user-menu" class="user-menu-dropdown hidden absolute right-0 top-12 w-48 bg-dark border border-primary/20 rounded-md shadow-xl py-1 z-50">
+                            <!-- User menu content will be populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Title -->
+            <div class="md:hidden text-center py-3 border-t border-primary/10 mt-3">
+                <h1 class="text-xl font-luxury font-bold text-gradient">Your Cart</h1>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Section -->
+    <section class="py-6 md:py-12 bg-dark min-h-screen">
+        <div class="nav-container">
+            <div class="mb-6 md:mb-8 text-center">
+                <h2 class="text-lg md:text-xl font-serif text-gray-300 mb-2">Curated Selection</h2>
+                <div class="w-20 md:w-24 h-px bg-gradient-to-r from-transparent via-primary to-transparent mx-auto"></div>
+            </div>
+            
+            <div id="cart-container">
+                <!-- Cart items will be dynamically populated here -->
+            </div>
+            
+            <!-- Empty Cart State -->
+            <div id="empty-cart" class="empty-cart hidden">
+                <div class="empty-cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-luxury font-bold text-gray-500 mb-4">Your Cart is Empty</h2>
+                <p class="text-gray-400 mb-6 md:mb-8 max-w-md mx-auto text-sm md:text-base">
+                    Your curated luxury collection awaits. Begin your journey with timeless elegance.
+                </p>
+                <a href="index.html" class="btn-primary">
+                    <i class="fas fa-gem mr-3"></i>
+                    Explore Collections
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Checkout Summary -->
+    <div id="checkout-summary" class="hidden animate-fadeIn">
+        <div class="nav-container">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
+                <div class="text-center md:text-left">
+                    <p class="text-xl md:text-2xl font-luxury font-bold text-primary mb-1">
+                        ₹<span id="cart-total">0.00</span>
+                    </p>
+                    <p class="text-xs md:text-sm text-gray-400"><span id="cart-count">0</span> curated items</p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 md:gap-4 w-full md:w-auto">
+                    <button id="continue-shopping" class="px-6 md:px-8 py-2 md:py-3 border border-primary/40 text-primary rounded-xl hover:bg-primary/10 transition-all duration-300 text-sm md:text-base">
+                        Continue Shopping
+                    </button>
+                    <button id="checkout-btn" class="btn-primary px-6 md:px-8 py-2 md:py-3">
+                        <i class="fas fa-lock mr-2 md:mr-3"></i>
+                        Secure Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Footer -->
+    <footer class="md:hidden">
+        <div class="bottom-footer">
+            <a href="index.html">
+                <i class="fa-solid fa-house"></i>
+            </a>
+            <a href="#"><i class="fas fa-search"></i></a>
+            <a href="cart.html" class="active relative">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-count-footer" class="cart-badge">0</span>
+            </a>
+            <a href="wishlist.html"><i class="fas fa-heart"></i></a>
+            <a id="mobile-account-button"><i class="fas fa-user"></i></a>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="p-6 md:p-8">
+                <button id="close-auth-modal" class="absolute top-4 md:top-6 right-4 md:right-6 text-gray-400 hover:text-white transition-colors">
+                    <i class="fas fa-times text-xl md:text-2xl"></i>
+                </button>
+                
+                <!-- Tabs -->
+                <div class="flex border-b border-primary/20 mb-6">
+                    <button id="login-tab" class="flex-1 py-4 font-luxury text-lg md:text-xl font-semibold text-primary border-b-2 border-primary">Login</button>
+                    <button id="signup-tab" class="flex-1 py-4 font-luxury text-lg md:text-xl font-semibold text-gray-400">Sign Up</button>
+                </div>
+                
+                <!-- Login Form -->
+                <div id="login-form">
+                    <h2 class="text-xl md:text-2xl font-luxury font-bold mb-6 text-center">Welcome Back</h2>
+                    
+                    <form id="login-email-form" class="space-y-4">
+                        <div>
+                            <label for="login-email" class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                            <input type="email" id="login-email" required
+                                class="w-full px-4 py-3 bg-dark/50 border border-primary/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-colors">
+                        </div>
+                        
+                        <div>
+                            <label for="login-password" class="block text-sm font-medium text-gray-400 mb-2">Password</label>
+                            <input type="password" id="login-password" required
+                                class="w-full px-4 py-3 bg-dark/50 border border-primary/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-colors">
+                        </div>
+                        
+                        <button type="submit" class="w-full btn-primary py-3">
+                            Sign In
+                        </button>
+                    </form>
+                    
+                    <div class="mt-6">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-700"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-4 bg-dark text-gray-500">Or continue with</span>
+                            </div>
+                        </div>
+                        
+                        <button id="google-login" class="w-full mt-4 flex items-center justify-center px-4 py-3 border border-primary/30 rounded-lg bg-dark/50 text-white hover:bg-primary/10 transition-colors">
+                            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="w-5 h-5 mr-3">
+                            Sign in with Google
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Signup Form -->
+                <div id="signup-form" class="hidden">
+                    <h2 class="text-xl md:text-2xl font-luxury font-bold mb-6 text-center">Join Our Circle</h2>
+                    
+                    <form id="signup-email-form" class="space-y-4">
+                        <div>
+                            <label for="signup-name" class="block text-sm font-medium text-gray-400 mb-2">Full Name</label>
+                            <input type="text" id="signup-name" required
+                                class="w-full px-4 py-3 bg-dark/50 border border-primary/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-colors">
+                        </div>
+                        
+                        <div>
+                            <label for="signup-email" class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                            <input type="email" id="signup-email" required
+                                class="w-full px-4 py-3 bg-dark/50 border border-primary/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-colors">
+                        </div>
+                        
+                        <div>
+                            <label for="signup-password" class="block text-sm font-medium text-gray-400 mb-2">Password</label>
+                            <input type="password" id="signup-password" required minlength="6"
+                                class="w-full px-4 py-3 bg-dark/50 border border-primary/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-colors">
+                        </div>
+                        
+                        <button type="submit" class="w-full btn-primary py-3">
+                            Create Account
+                        </button>
+                    </form>
+                    
+                    <div class="mt-6">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-700"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-4 bg-dark text-gray-500">Or continue with</span>
+                            </div>
+                        </div>
+                        
+                        <button id="google-signup" class="w-full mt-4 flex items-center justify-center px-4 py-3 border border-primary/30 rounded-lg bg-dark/50 text-white hover:bg-primary/10 transition-colors">
+                            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="w-5 h-5 mr-3">
+                            Sign up with Google
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-16 bg-dark border-t border-primary/10">
+        <div class="nav-container">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <!-- Brand -->
+                <div>
+                    <a href="#" class="text-3xl font-luxury font-bold text-gradient tracking-tight mb-6 inline-block">PRIMEVY</a>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        Redefining luxury through curated excellence since 2015.
+                    </p>
+                </div>
+
+                <!-- Collections -->
+                <div>
+                    <h3 class="font-luxury text-xl font-semibold mb-6 text-primary">Collections</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">New Arrivals</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Limited Editions</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Private Sale</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Archive Collection</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h3 class="font-luxury text-xl font-semibold mb-6 text-primary">Services</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Personal Shopping</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Concierge Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Worldwide Shipping</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Authentication</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h3 class="font-luxury text-xl font-semibold mb-6 text-primary">Contact</h3>
+                    <ul class="space-y-4">
+                        <li class="text-gray-400 flex items-start gap-3">
+                            <i class="fas fa-phone text-primary mt-1"></i>
+                            <div>
+                                <div class="font-medium">Concierge</div>
+                                <div>+1 (888) LUX-PRIME</div>
+                            </div>
+                        </li>
+                        <li class="text-gray-400 flex items-start gap-3">
+                            <i class="fas fa-envelope text-primary mt-1"></i>
+                            <div>
+                                <div class="font-medium">Email</div>
+                                <div>concierge@primevy.com</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="border-t border-primary/10 pt-12">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="text-gray-400 text-sm mb-6 md:mb-0">
+                        &copy; 2015-2024 Primevy Luxury. All rights reserved.
+                    </div>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#" class="text-gray-400 hover:text-primary text-sm transition-colors">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-primary text-sm transition-colors">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-primary text-sm transition-colors">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBdig0navZd6v-W57ZIaKstQ_M7DushGjw",
+            authDomain: "prime-e6e11.firebaseapp.com",
+            databaseURL: "https://prime-e6e11-default-rtdb.firebaseio.com",
+            projectId: "prime-e6e11",
+            storageBucket: "prime-e6e11.firebasestorage.app",
+            messagingSenderId: "496246501275",
+            appId: "1:496246501275:web:f313ea73269ae51f7ffb3e"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // Cart functionality
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let currentUser = null;
+
+        // DOM Elements
+        const authModal = document.getElementById('auth-modal');
+        const closeAuthModal = document.getElementById('close-auth-modal');
+        const accountButton = document.getElementById('account-button');
+        const mobileAccountButton = document.getElementById('mobile-account-button');
+        const userMenu = document.getElementById('user-menu');
+        const loginTab = document.getElementById('login-tab');
+        const signupTab = document.getElementById('signup-tab');
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const loginEmailForm = document.getElementById('login-email-form');
+        const signupEmailForm = document.getElementById('signup-email-form');
+        const googleLogin = document.getElementById('google-login');
+        const googleSignup = document.getElementById('google-signup');
+        const cartContainer = document.getElementById('cart-container');
+        const emptyCart = document.getElementById('empty-cart');
+        const checkoutSummary = document.getElementById('checkout-summary');
+        const cartTotal = document.getElementById('cart-total');
+        const cartCount = document.getElementById('cart-count');
+        const cartCountFooter = document.getElementById('cart-count-footer');
+        const cartBadge = document.getElementById('cart-badge');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const continueShopping = document.getElementById('continue-shopping');
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notification-message');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAuth();
+            setupAuthEventListeners();
+            renderCart();
+            updateCartCount();
+            
+            // Close modal when clicking outside
+            authModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeAuthModalFunc();
+                }
+            });
+
+            // Continue shopping button
+            continueShopping.addEventListener('click', function() {
+                window.location.href = 'index.html';
+            });
+        });
+
+        // Initialize auth
+        function initializeAuth() {
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    currentUser = user;
+                    updateUIForUser(user);
+                    showNotification(`Welcome back, ${user.displayName || user.email}!`, 'success');
+                } else {
+                    currentUser = null;
+                    updateUIForGuest();
+                }
+            });
+        }
+
+        function setupAuthEventListeners() {
+            // Auth modal triggers
+            accountButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (currentUser) {
+                    userMenu.classList.toggle('hidden');
+                } else {
+                    openAuthModal();
+                }
+            });
+
+            mobileAccountButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (currentUser) {
+                    userMenu.classList.toggle('hidden');
+                } else {
+                    openAuthModal();
+                }
+            });
+
+            // Close auth modal
+            closeAuthModal.addEventListener('click', closeAuthModalFunc);
+
+            // Tab switching
+            loginTab.addEventListener('click', () => switchAuthTab('login'));
+            signupTab.addEventListener('click', () => switchAuthTab('signup'));
+
+            // Form submissions
+            loginEmailForm.addEventListener('submit', handleEmailLogin);
+            signupEmailForm.addEventListener('submit', handleEmailSignup);
+
+            // Google auth
+            googleLogin.addEventListener('click', handleGoogleAuth);
+            googleSignup.addEventListener('click', handleGoogleAuth);
+
+            // Close user menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!accountButton.contains(e.target) && 
+                    !mobileAccountButton.contains(e.target) && 
+                    !userMenu.contains(e.target)) {
+                    userMenu.classList.add('hidden');
+                }
+            });
+
+            // Checkout button
+            checkoutBtn.addEventListener('click', handleCheckout);
+        }
+
+        function openAuthModal() {
+            authModal.classList.remove('hidden');
+        }
+
+        function closeAuthModalFunc() {
+            authModal.classList.add('hidden');
+        }
+
+        function switchAuthTab(tab) {
+            if (tab === 'login') {
+                loginTab.classList.add('text-primary', 'border-primary');
+                loginTab.classList.remove('text-gray-400');
+                signupTab.classList.add('text-gray-400');
+                signupTab.classList.remove('text-primary', 'border-primary');
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+            } else {
+                signupTab.classList.add('text-primary', 'border-primary');
+                signupTab.classList.remove('text-gray-400');
+                loginTab.classList.add('text-gray-400');
+                loginTab.classList.remove('text-primary', 'border-primary');
+                signupForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            }
+        }
+
+        async function handleEmailLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                closeAuthModalFunc();
+                showNotification('Successfully signed in!', 'success');
+            } catch (error) {
+                console.error('Login error:', error);
+                showNotification(getAuthErrorMessage(error), 'error');
+            }
+        }
+
+        async function handleEmailSignup(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                
+                // Update profile with display name
+                await userCredential.user.updateProfile({
+                    displayName: name
+                });
+                
+                closeAuthModalFunc();
+                showNotification('Account created successfully!', 'success');
+            } catch (error) {
+                console.error('Signup error:', error);
+                showNotification(getAuthErrorMessage(error), 'error');
+            }
+        }
+
+        async function handleGoogleAuth() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
+            try {
+                const result = await auth.signInWithPopup(provider);
+                closeAuthModalFunc();
+                showNotification('Successfully signed in with Google!', 'success');
+            } catch (error) {
+                console.error('Google auth error:', error);
+                showNotification(getAuthErrorMessage(error), 'error');
+            }
+        }
+
+        async function handleLogout() {
+            try {
+                await auth.signOut();
+                userMenu.classList.add('hidden');
+                showNotification('Successfully signed out!', 'success');
+            } catch (error) {
+                console.error('Logout error:', error);
+                showNotification('Error signing out', 'error');
+            }
+        }
+
+        function updateUIForUser(user) {
+            const name = user.displayName || user.email.split('@')[0];
+            
+            // Update account button
+            accountButton.innerHTML = `
+                <div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center">
+                    <i class="fas fa-user text-dark text-xs md:text-sm"></i>
+                </div>
+                <span class="hidden md:inline font-medium">${name}</span>
+            `;
+            
+            // Update user menu
+            userMenu.innerHTML = `
+                <div class="px-4 py-3 border-b border-primary/10">
+                    <p class="text-sm font-medium text-gray-100">${user.displayName || 'User'}</p>
+                    <p class="text-sm text-gray-400 truncate">${user.email}</p>
+                </div>
+                <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-primary/10 transition-colors">
+                    <i class="fas fa-user-circle mr-2"></i>Profile
+                </a>
+                <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-primary/10 transition-colors">
+                    <i class="fas fa-shopping-bag mr-2"></i>Orders
+                </a>
+                <button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-primary/10 transition-colors">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
+                </button>
+            `;
+            
+            // Re-attach event listener to new logout button
+            document.getElementById('logout-btn').addEventListener('click', handleLogout);
+        }
+
+        function updateUIForGuest() {
+            accountButton.innerHTML = `
+                <div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center">
+                    <i class="fas fa-user text-dark text-xs md:text-sm"></i>
+                </div>
+                <span class="hidden md:inline font-medium">Account</span>
+            `;
+        }
+
+        function getAuthErrorMessage(error) {
+            switch (error.code) {
+                case 'auth/invalid-email':
+                    return 'Invalid email address';
+                case 'auth/user-disabled':
+                    return 'This account has been disabled';
+                case 'auth/user-not-found':
+                    return 'No account found with this email';
+                case 'auth/wrong-password':
+                    return 'Incorrect password';
+                case 'auth/email-already-in-use':
+                    return 'An account with this email already exists';
+                case 'auth/weak-password':
+                    return 'Password should be at least 6 characters';
+                case 'auth/network-request-failed':
+                    return 'Network error. Please check your connection';
+                default:
+                    return error.message || 'An error occurred';
+            }
+        }
+
+        // Enhanced notification function
+        function showNotification(message, type = 'success') {
+            if (notification && notificationMessage) {
+                notificationMessage.textContent = message;
+                
+                // Set icon based on type
+                const icon = notification.querySelector('i');
+                if (type === 'error') {
+                    icon.className = 'fas fa-exclamation-circle text-red-400 text-xl';
+                } else {
+                    icon.className = 'fas fa-check-circle text-green-400 text-xl';
+                }
+                
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Render cart items
+        function renderCart() {
+            // Clear existing content
+            cartContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                // Show empty cart state
+                emptyCart.classList.remove('hidden');
+                checkoutSummary.classList.add('hidden');
+                return;
+            }
+            
+            // Hide empty cart state
+            emptyCart.classList.add('hidden');
+            checkoutSummary.classList.remove('hidden');
+            
+            // Calculate totals
+            let totalItems = 0;
+            let totalPrice = 0;
+            
+            // Add cart items with animations
+            cart.forEach((item, index) => {
+                setTimeout(() => {
+                    const cartItem = createCartItem(item);
+                    cartContainer.appendChild(cartItem);
+                    cartItem.style.animation = 'fadeIn 0.5s ease-out';
+                }, index * 100);
+                
+                totalItems += item.quantity;
+                totalPrice += item.price * item.quantity;
+            });
+            
+            // Update totals
+            cartTotal.textContent = totalPrice.toFixed(2);
+            cartCount.textContent = totalItems;
+        }
+
+        // Create cart item HTML
+        function createCartItem(item) {
+            const cartItem = document.createElement('div');
+            cartItem.className = 'cart-item p-4 md:p-6 mb-4 animate-fadeIn';
+            cartItem.setAttribute('data-id', item.id);
+            
+            cartItem.innerHTML = `
+                <div class="flex flex-col md:flex-row items-start md:items-center">
+                    <div class="flex-shrink-0 mb-4 md:mb-0 md:mr-6">
+                        <img src="${item.image || 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}" 
+                             alt="${item.name}" 
+                             class="product-image">
+                    </div>
+                    <div class="flex-grow">
+                        <h3 class="font-luxury text-lg md:text-xl font-semibold mb-2">${item.name}</h3>
+                        <p class="text-primary font-serif text-lg mb-3">₹${item.price.toFixed(2)}</p>
+                        <div class="flex items-center">
+                            <div class="quantity-controls">
+                                <button class="decrease-quantity quantity-btn">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="quantity px-4 py-2 font-medium">${item.quantity}</span>
+                                <button class="increase-quantity quantity-btn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <button class="remove-btn">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mt-4 md:mt-0 md:ml-auto">
+                        <p class="font-luxury text-xl md:text-2xl font-bold text-primary">₹${(item.price * item.quantity).toFixed(2)}</p>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners
+            const decreaseBtn = cartItem.querySelector('.decrease-quantity');
+            const increaseBtn = cartItem.querySelector('.increase-quantity');
+            const quantitySpan = cartItem.querySelector('.quantity');
+            const removeBtn = cartItem.querySelector('.remove-btn');
+            
+            decreaseBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                updateQuantity(item.id, parseInt(quantitySpan.textContent) - 1);
+            });
+            
+            increaseBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                updateQuantity(item.id, parseInt(quantitySpan.textContent) + 1);
+            });
+            
+            removeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                removeFromCart(item.id);
+            });
+            
+            return cartItem;
+        }
+
+        // Update item quantity
+        function updateQuantity(productId, newQuantity) {
+            if (newQuantity < 1) {
+                removeFromCart(productId);
+                return;
+            }
+            
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity = newQuantity;
+                saveCart();
+                renderCart();
+                updateCartCount();
+            }
+        }
+
+        // Remove item from cart
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            saveCart();
+            renderCart();
+            updateCartCount();
+            showNotification('Item removed from cart', 'success');
+        }
+
+        // Save cart to localStorage
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        // Update cart count in navbar and footer
+        function updateCartCount() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            if (cartBadge) {
+                cartBadge.textContent = totalItems;
+                cartBadge.classList.add('pulse');
+                setTimeout(() => {
+                    cartBadge.classList.remove('pulse');
+                }, 500);
+            }
+            
+            if (cartCountFooter) {
+                cartCountFooter.textContent = totalItems;
+            }
+        }
+
+        // Handle checkout
+        function handleCheckout() {
+            if (!currentUser) {
+                showNotification('Please sign in to proceed with checkout', 'error');
+                openAuthModal();
+                return;
+            }
+            
+            if (cart.length === 0) {
+                showNotification('Your cart is empty', 'error');
+                return;
+            }
+            
+            // Show loading state
+            const originalHtml = checkoutBtn.innerHTML;
+            checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
+            checkoutBtn.disabled = true;
+            
+            // Simulate checkout process
+            setTimeout(() => {
+                showNotification('Your order has been placed successfully!', 'success');
+                
+                // Clear cart after successful checkout
+                cart = [];
+                saveCart();
+                renderCart();
+                updateCartCount();
+                
+                // Reset button
+                checkoutBtn.innerHTML = originalHtml;
+                checkoutBtn.disabled = false;
+            }, 2000);
+        }
+    </script>
+</body>
+
+</html>

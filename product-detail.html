@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Primevy Luxury</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #C19A6B;
+            --secondary: #1a1a1a;
+            --accent: #D4AF37;
+            --light: #f8f8f8;
+            --dark: #0a0a0a;
+            --text: #e5e5e5;
+            --text-light: #a0a0a0;
+            --platinum: #e5e5e5;
+            --champagne: #f7efdc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .font-luxury {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(193, 154, 107, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Navigation */
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Text Gradient */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .bg-gradient-premium {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 100%);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: var(--dark);
+            font-weight: 600;
+            padding: 14px 36px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(193, 154, 107, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            font-weight: 600;
+            padding: 14px 36px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary);
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(193, 154, 107, 0.1);
+        }
+
+        /* Product Images */
+        .product-gallery {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .product-gallery {
+                grid-template-columns: 100px 1fr;
+            }
+        }
+
+        .main-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 1px solid rgba(193, 154, 107, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        @media (max-width: 768px) {
+            .main-image {
+                height: 350px;
+            }
+        }
+
+        .thumbnail-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .thumbnail-container {
+                flex-direction: column;
+                overflow-y: auto;
+                max-height: 500px;
+            }
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .thumbnail:hover,
+        .thumbnail.active {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        /* Product Details Card */
+        .product-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(10, 10, 10, 0.95) 100%);
+            border-radius: 15px;
+            border: 1px solid rgba(193, 154, 107, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        /* Quantity Selector */
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(193, 154, 107, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            width: fit-content;
+        }
+
+        .quantity-btn {
+            background: rgba(193, 154, 107, 0.1);
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background: rgba(193, 154, 107, 0.2);
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: none;
+            outline: none;
+            padding: 10px;
+            background: transparent;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* Tabs */
+        .product-tabs {
+            border-bottom: 1px solid rgba(193, 154, 107, 0.1);
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-light);
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px 0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Feature List */
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(193, 154, 107, 0.1);
+            display: flex;
+            align-items: center;
+            color: var(--text);
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        /* Review Cards */
+        .review-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(10, 10, 10, 0.8) 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(193, 154, 107, 0.1);
+            animation: slideInUp 0.5s ease;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .review-user {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1em;
+        }
+
+        .review-date {
+            color: var(--text-light);
+            font-size: 0.9em;
+        }
+
+        .review-rating {
+            color: var(--accent);
+            margin: 10px 0;
+        }
+
+        .review-comment {
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        /* Rating Stars */
+        .rating-stars {
+            color: var(--accent);
+        }
+
+        /* Price Styling */
+        .price-current {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--primary);
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .price-original {
+            font-size: 1.3em;
+            color: var(--text-light);
+            text-decoration: line-through;
+        }
+
+        .discount-badge {
+            background: linear-gradient(135deg, var(--accent) 0%, #ffd700 100%);
+            color: var(--dark);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Related Products */
+        .related-products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .related-products {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+        }
+
+        /* Cart Badge */
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent);
+            color: var(--dark);
+            font-size: 12px;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-badge.pulse {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 20px 28px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--dark) 100%);
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            z-index: 1001;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(193, 154, 107, 0.2);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Review Modal */
+        .review-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .review-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .review-modal-content {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--dark) 100%);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            border: 1px solid rgba(193, 154, 107, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .review-modal.active .review-modal-content {
+            transform: scale(1);
+        }
+
+        .review-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .review-modal-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: var(--primary);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .review-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .review-modal-close:hover {
+            color: var(--primary);
+        }
+
+        .star-rating-input {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 25px;
+        }
+
+        .star-rating-input .star {
+            font-size: 1.8em;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star-rating-input .star.active {
+            color: var(--accent);
+        }
+
+        .review-form textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            background: rgba(193, 154, 107, 0.05);
+            border: 1px solid rgba(193, 154, 107, 0.2);
+            border-radius: 8px;
+            resize: vertical;
+            font-family: inherit;
+            margin-bottom: 20px;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .review-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(193, 154, 107, 0.1);
+        }
+
+        .review-form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .review-form-submit {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: var(--dark);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .review-form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(193, 154, 107, 0.3);
+        }
+
+        .review-form-cancel {
+            background: rgba(193, 154, 107, 0.1);
+            color: var(--text);
+            border: 1px solid rgba(193, 154, 107, 0.3);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .review-form-cancel:hover {
+            background: rgba(193, 154, 107, 0.2);
+        }
+
+        /* Rating Distribution */
+        .rating-distribution {
+            width: 100%;
+        }
+
+        .rating-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .rating-label {
+            width: 60px;
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .rating-progress {
+            flex: 1;
+            height: 8px;
+            background: rgba(193, 154, 107, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0 15px;
+        }
+
+        .rating-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 4px;
+        }
+
+        .rating-count {
+            width: 40px;
+            font-size: 0.9em;
+            color: var(--text-light);
+            text-align: right;
+        }
+
+        /* See More Button */
+        .see-more-reviews {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: var(--dark);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .see-more-reviews:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(193, 154, 107, 0.3);
+        }
+
+        /* Bottom Footer */
+        .bottom-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 8%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px 0;
+            border-top: 1px solid rgba(193, 154, 107, 0.1);
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .bottom-footer a {
+            color: var(--text-light);
+            font-size: 22px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px;
+        }
+
+        .bottom-footer a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .bottom-footer a.active {
+            color: var(--primary);
+        }
+
+        .bottom-footer a.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 5px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .price-current {
+                font-size: 2em;
+            }
+            
+            .price-original {
+                font-size: 1.1em;
+            }
+            
+            .tab-btn {
+                padding: 12px 20px;
+                font-size: 0.9em;
+            }
+            
+            .main-image {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .price-current {
+                font-size: 1.8em;
+            }
+            
+            .tab-btn {
+                padding: 10px 15px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-dark">
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div class="flex items-center space-x-4">
+            <i class="fas fa-check-circle text-green-400 text-xl"></i>
+            <span id="notification-message" class="font-medium">Product added to cart!</span>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div id="review-modal" class="review-modal">
+        <div class="review-modal-content">
+            <div class="review-modal-header">
+                <h3 class="review-modal-title">Share Your Experience</h3>
+                <button id="review-modal-close" class="review-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="review-form" class="review-form">
+                <div class="star-rating-input" id="star-rating">
+                    <span class="star" data-rating="1"><i class="far fa-star"></i></span>
+                    <span class="star" data-rating="2"><i class="far fa-star"></i></span>
+                    <span class="star" data-rating="3"><i class="far fa-star"></i></span>
+                    <span class="star" data-rating="4"><i class="far fa-star"></i></span>
+                    <span class="star" data-rating="5"><i class="far fa-star"></i></span>
+                </div>
+                <textarea id="review-comment" placeholder="Share your thoughts about this luxury product..."></textarea>
+                <div class="review-form-actions">
+                    <button type="button" id="review-form-cancel" class="review-form-cancel">Cancel</button>
+                    <button type="submit" class="review-form-submit">Submit Review</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar-luxury shadow-lg sticky top-0 z-50 bg-dark/95 backdrop-blur-sm border-b border-primary/10">
+        <div class="nav-container">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="index.html" class="text-3xl font-bold font-luxury text-gradient tracking-tight">PRIMEVY</a>
+                    <span class="ml-3 text-xs text-accent uppercase tracking-[0.2em] hidden md:inline font-light">LUXURY</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="desktop-menu flex items-center space-x-8">
+                    <!-- Navigation Links -->
+                    <div class="hidden lg:flex items-center space-x-8">
+                        <a href="index.html#collections" class="text-gray-300 hover:text-primary transition-colors font-medium tracking-wide">Collections</a>
+                        <a href="index.html#brands" class="text-gray-300 hover:text-primary transition-colors font-medium tracking-wide">Brands</a>
+                        <a href="index.html#sale" class="text-gray-300 hover:text-primary transition-colors font-medium tracking-wide">Private Sale</a>
+                        <a href="index.html#concierge" class="text-gray-300 hover:text-primary transition-colors font-medium tracking-wide">Concierge</a>
+                    </div>
+
+                    <!-- Right Menu -->
+                    <div class="flex items-center space-x-6">
+                        <!-- Wishlist -->
+                        <a href="wishlist.html" class="text-gray-300 hover:text-primary transition-colors relative">
+                            <i class="fas fa-heart text-xl"></i>
+                        </a>
+                        
+                        <!-- Cart -->
+                        <a href="cart.html" id="cart-link" class="text-gray-300 hover:text-primary transition-colors relative">
+                            <i class="fas fa-shopping-cart text-xl"></i>
+                            <span id="cart-badge" class="cart-badge">0</span>
+                        </a>
+                        
+                        <!-- Account -->
+                        <div class="relative">
+                            <button id="account-button" class="text-gray-300 hover:text-primary transition-colors flex items-center gap-2">
+                                <div class="w-9 h-9 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center">
+                                    <i class="fas fa-user text-dark text-sm"></i>
+                                </div>
+                                <span class="hidden md:inline font-medium">Account</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden text-gray-300">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu hidden md:hidden bg-dark border-t border-primary/10">
+            <div class="nav-container py-4">
+                <!-- Mobile Links -->
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html#collections" class="text-gray-300 hover:text-primary transition-colors">Collections</a>
+                    <a href="index.html#brands" class="text-gray-300 hover:text-primary transition-colors">Brands</a>
+                    <a href="index.html#sale" class="text-gray-300 hover:text-primary transition-colors">Private Sale</a>
+                    <a href="index.html#concierge" class="text-gray-300 hover:text-primary transition-colors">Concierge</a>
+                    <a href="wishlist.html" class="text-gray-300 hover:text-primary transition-colors">Wishlist</a>
+                    <a href="cart.html" class="text-gray-300 hover:text-primary transition-colors">Cart</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="bg-dark/50 border-b border-primary/10">
+        <div class="nav-container py-4">
+            <nav class="flex items-center space-x-2 text-sm" aria-label="Breadcrumb">
+                <a href="index.html" class="text-gray-400 hover:text-primary transition-colors">
+                    <i class="fas fa-home"></i>
+                </a>
+                <i class="fas fa-chevron-right text-xs text-gray-600"></i>
+                <a href="index.html" class="text-gray-400 hover:text-primary transition-colors">Collections</a>
+                <i class="fas fa-chevron-right text-xs text-gray-600"></i>
+                <span id="product-category" class="text-primary"></span>
+                <i class="fas fa-chevron-right text-xs text-gray-600"></i>
+                <span id="product-name-breadcrumb" class="text-white truncate max-w-32 font-medium"></span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="nav-container py-8">
+        <!-- Loading State -->
+        <div id="loading-state" class="text-center py-20">
+            <div class="spinner mx-auto mb-6"></div>
+            <h3 class="text-2xl font-luxury font-bold mb-3 text-primary">Loading Luxury Details</h3>
+            <p class="text-gray-400">Discovering the finest craftsmanship...</p>
+        </div>
+
+        <!-- Product Details -->
+        <div id="product-details" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- Product Images -->
+                <div class="product-gallery">
+                    <div class="thumbnail-container">
+                        <!-- Thumbnails will be added dynamically -->
+                    </div>
+                    <div>
+                        <img id="main-image" src="" alt="Product Image" class="main-image">
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <div class="product-card p-8">
+                        <h1 id="product-title" class="text-3xl md:text-4xl font-luxury font-bold text-white mb-4"></h1>
+                        
+                        <div class="flex items-center mb-6">
+                            <div class="rating-stars flex mr-3" id="product-rating"></div>
+                            <span id="product-reviews" class="text-gray-400"></span>
+                            <span class="mx-3 text-gray-600">•</span>
+                            <span id="product-sold" class="text-gray-400">100+ acquired</span>
+                        </div>
+
+                        <div class="mb-8">
+                            <div class="flex items-center flex-wrap gap-4 mb-3">
+                                <span id="product-price" class="price-current"></span>
+                                <span id="product-original-price" class="price-original"></span>
+                                <span id="product-discount" class="discount-badge"></span>
+                            </div>
+                            <p class="text-green-400 text-sm flex items-center">
+                                <i class="fas fa-check-circle mr-2"></i>
+                                Available for immediate delivery
+                            </p>
+                        </div>
+
+                        <div class="mb-8">
+                            <p id="product-description" class="text-gray-300 leading-relaxed"></p>
+                        </div>
+
+                        <!-- Features -->
+                        <div class="mb-8">
+                            <h3 class="font-luxury text-xl font-semibold mb-4 text-primary">Craftsmanship & Details:</h3>
+                            <ul id="product-features" class="feature-list"></ul>
+                        </div>
+
+                        <!-- Quantity Selector -->
+                        <div class="mb-8">
+                            <label class="block text-sm font-medium text-gray-400 mb-3">Quantity:</label>
+                            <div class="quantity-selector">
+                                <button class="quantity-btn" id="decrease-qty">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="10">
+                                <button class="quantity-btn" id="increase-qty">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                            <button id="add-to-cart-btn" class="btn-primary flex-1 py-4 flex items-center justify-center">
+                                <i class="fas fa-shopping-cart mr-3"></i> Add to Collection
+                            </button>
+                            <div id='product-component-1767614842894'>
+                            <button id="buy-now-btn" class="btn-secondary flex-1 py-4">
+                                Acquire Now
+                            </button>
+                            </div>
+                        </div>
+
+                        <!-- Additional Info -->
+                        <div class="border-t border-primary/10 pt-6">
+                            <div class="grid grid-cols-2 gap-6 text-sm">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                                        <i class="fas fa-shipping-fast text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-white">White Glove Delivery</div>
+                                        <div class="text-gray-400">Complimentary</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                                        <i class="fas fa-undo-alt text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-white">30-Day Assurance</div>
+                                        <div class="text-gray-400">Hassle-free returns</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                                        <i class="fas fa-shield-alt text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-white">Lifetime Authentication</div>
+                                        <div class="text-gray-400">Guaranteed authenticity</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                                        <i class="fas fa-headset text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-white">Personal Concierge</div>
+                                        <div class="text-gray-400">24/7 dedicated support</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Tabs -->
+            <div class="product-card mb-12">
+                <div class="product-tabs px-6">
+                    <button class="tab-btn active" data-tab="description">Story & Details</button>
+                    <button class="tab-btn" data-tab="specifications">Craftsmanship</button>
+                    <button class="tab-btn" data-tab="reviews">Patron Reviews</button>
+                    <button class="tab-btn" data-tab="shipping">Delivery & Assurance</button>
+                </div>
+
+                <div class="px-6 md:px-8">
+                    <!-- Description Tab -->
+                    <div id="description-tab" class="tab-content active">
+                        <div id="full-description" class="text-gray-300 leading-relaxed"></div>
+                    </div>
+
+                    <!-- Specifications Tab -->
+                    <div id="specifications-tab" class="tab-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-4">
+                                <div class="flex justify-between border-b border-primary/10 pb-3">
+                                    <span class="text-gray-400">Collection</span>
+                                    <span id="spec-category" class="font-medium text-white"></span>
+                                </div>
+                                <div class="flex justify-between border-b border-primary/10 pb-3">
+                                    <span class="text-gray-400">Craftsmanship</span>
+                                    <span class="font-medium text-white">Artisanal Excellence</span>
+                                </div>
+                                <div class="flex justify-between border-b border-primary/10 pb-3">
+                                    <span class="text-gray-400">Authentication</span>
+                                    <span class="font-medium text-white">Lifetime Guarantee</span>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex justify-between border-b border-primary/10 pb-3">
+                                    <span class="text-gray-400">Materials</span>
+                                    <span class="font-medium text-white">Premium Quality</span>
+                                </div>
+                                <div class="flex justify-between border-b border-primary/10 pb-3">
+                                    <span class="text-gray-400">Finish</span>
+                                    <span class="font-medium text-white">Hand-Polished</span>
+                                </div>
+                                <div class="flex justify-between border-b border-primary/10 pb-3">
+                                    <span class="text-gray-400">Archive Number</span>
+                                    <span id="product-sku" class="font-medium text-white"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div id="reviews-tab" class="tab-content">
+                        <div class="flex flex-col md:flex-row gap-8 mb-8">
+                            <div class="md:w-1/3">
+                                <div class="text-center md:text-left">
+                                    <div class="text-5xl font-luxury font-bold text-white mb-2" id="average-rating">0.0</div>
+                                    <div class="rating-stars flex justify-center md:justify-start mb-3 text-xl" id="average-rating-stars"></div>
+                                    <div class="text-sm text-gray-400" id="total-reviews">Based on 0 patron reviews</div>
+                                </div>
+                                
+                                <!-- Rating Distribution -->
+                                <div class="mt-8 rating-distribution" id="rating-distribution">
+                                    <!-- Rating bars will be populated dynamically -->
+                                </div>
+                            </div>
+                            
+                            <div class="md:w-2/3">
+                                <!-- Add Review Button -->
+                                <div class="bg-primary/10 border border-primary/20 rounded-xl p-6 mb-8">
+                                    <h4 class="font-luxury text-xl font-semibold text-primary mb-3">Share Your Experience</h4>
+                                    <p class="text-gray-300 mb-4">Join our exclusive circle of patrons. Your insights help others discover exceptional craftsmanship.</p>
+                                    <button id="add-review-btn" class="btn-primary">
+                                        <i class="fas fa-pen mr-3"></i>Share Your Review
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reviews List -->
+                        <div id="reviews-container">
+                            <div class="text-center py-8">
+                                <div class="spinner mx-auto mb-4"></div>
+                                <p class="text-gray-400">Loading patron reviews...</p>
+                            </div>
+                        </div>
+
+                        <!-- See More Reviews Button -->
+                        <button id="see-more-reviews" class="see-more-reviews hidden">
+                            Discover More Reviews
+                        </button>
+                    </div>
+
+                    <!-- Shipping Tab -->
+                    <div id="shipping-tab" class="tab-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-luxury text-xl font-semibold text-primary mb-4">White Glove Delivery</h4>
+                                <ul class="space-y-3">
+                                    <li class="text-gray-300 flex items-start gap-3">
+                                        <i class="fas fa-check text-primary mt-1"></i>
+                                        <span>Complimentary worldwide delivery</span>
+                                    </li>
+                                    <li class="text-gray-300 flex items-start gap-3">
+                                        <i class="fas fa-check text-primary mt-1"></i>
+                                        <span>Personalized unboxing experience</span>
+                                    </li>
+                                    <li class="text-gray-300 flex items-start gap-3">
+                                        <i class="fas fa-check text-primary mt-1"></i>
+                                        <span>24-hour order processing</span>
+                                    </li>
+                                    <li class="text-gray-300 flex items-start gap-3">
+                                        <i class="fas fa-check text-primary mt-1"></i>
+                                        <span>Real-time tracking with concierge updates</span>
+                                    </li>
+                                    <li class="text-gray-300 flex items-start gap-3">
+                                        <i class="fas fa-check text-primary mt-1"></i>
+                                        <span>In-person delivery available in select cities</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-luxury text-xl font-semibold text-primary mb-4">Patron Assurance</h4>
+                                <ul class="space-y-3">
+                                    <li class="text-gray-300 flex items-start gap-3">
+                                        <i class="fas fa-check text-primary mt-1"></i>
+                                        <span>30-day satisfaction guarantee</span>
+                                    </li>
+                                    <li class="text-gray-300 flex items-start gap-3">
+                                        <i class="fas fa-check text-primary mt-1"></i>
+                                        <span>Items must be in pristine condition</span>
+                                    </li>
+                                    <li class="text-gray-300 flex items-start gap-3">
+                                        <i class="fas fa-check text-primary mt-1"></i>
+                                        <span>Complimentary returns for authenticity concerns</span>
+                                    </li>
+                                    <li class="text-gray-300 flex items-start gap-3">
+                                        <i class="fas fa-check text-primary mt-1"></i>
+                                        <span>Return collection service available</span>
+                                    </li>
+                                    <li class="text-gray-300 flex items-start gap-3">
+                                        <i class="fas fa-check text-primary mt-1"></i>
+                                        <span>Priority refund processing (3-5 business days)</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Products -->
+            <section class="mt-16">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-luxury font-bold">
+                        <span class="text-gradient">Complementary</span> Luxuries
+                    </h2>
+                    <a href="index.html" class="hidden md:flex items-center text-primary hover:text-accent font-medium">
+                        View Collection
+                        <i class="fas fa-arrow-right ml-3"></i>
+                    </a>
+                </div>
+                <div id="related-products" class="related-products">
+                    <!-- Related products will be loaded here -->
+                    <div class="text-center py-8 col-span-full text-gray-400">
+                        <div class="spinner mx-auto mb-4"></div>
+                        <p>Discovering complementary pieces...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-16 bg-dark border-t border-primary/10">
+        <div class="nav-container">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <!-- Brand -->
+                <div>
+                    <a href="#" class="text-3xl font-luxury font-bold text-gradient tracking-tight mb-6 inline-block">PRIMEVY</a>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        Redefining luxury through curated excellence since 2015.
+                    </p>
+                </div>
+
+                <!-- Collections -->
+                <div>
+                    <h3 class="font-luxury text-xl font-semibold mb-6 text-primary">Collections</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">New Arrivals</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Limited Editions</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Private Sale</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Archive Collection</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h3 class="font-luxury text-xl font-semibold mb-6 text-primary">Services</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Personal Shopping</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Concierge Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Worldwide Shipping</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">Authentication</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h3 class="font-luxury text-xl font-semibold mb-6 text-primary">Contact</h3>
+                    <ul class="space-y-4">
+                        <li class="text-gray-400 flex items-start gap-3">
+                            <i class="fas fa-phone text-primary mt-1"></i>
+                            <div>
+                                <div class="font-medium">Concierge</div>
+                                <div>+1 (888) LUX-PRIME</div>
+                            </div>
+                        </li>
+                        <li class="text-gray-400 flex items-start gap-3">
+                            <i class="fas fa-envelope text-primary mt-1"></i>
+                            <div>
+                                <div class="font-medium">Email</div>
+                                <div>concierge@primevy.com</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="border-t border-primary/10 pt-12">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="text-gray-400 text-sm mb-6 md:mb-0">
+                        &copy; 2015-2024 Primevy Luxury. All rights reserved.
+                    </div>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#" class="text-gray-400 hover:text-primary text-sm transition-colors">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-primary text-sm transition-colors">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-primary text-sm transition-colors">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+
+    <script type="text/javascript">
+/*<![CDATA[*/
+(function () {
+  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+  if (window.ShopifyBuy) {
+    if (window.ShopifyBuy.UI) {
+      ShopifyBuyInit();
+    } else {
+      loadScript();
+    }
+  } else {
+    loadScript();
+  }
+  function loadScript() {
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = scriptURL;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+    script.onload = ShopifyBuyInit;
+  }
+  function ShopifyBuyInit() {
+    var client = ShopifyBuy.buildClient({
+      domain: 'vsjamk-qt.myshopify.com',
+      storefrontAccessToken: '4e521f1e15e9773d6e4f8c2a4d451217',
+    });
+    ShopifyBuy.UI.onReady(client).then(function (ui) {
+      ui.createComponent('product', {
+        id: '7278494941264',
+        node: document.getElementById('product-component-1767614842894'),
+        moneyFormat: 'Rs.%20%7B%7Bamount%7D%7D',
+        options: {
+  "product": {
+    "styles": {
+      "product": {
+        "@media (min-width: 601px)": {
+          "max-width": "100%",
+          "margin-left": "0",
+          "margin-bottom": "50px"
+        },
+        "text-align": "left"
+      },
+      "title": {
+        "font-size": "26px"
+      },
+      "button": {
+        "font-family": "Lato, sans-serif",
+        "font-weight": "bold",
+        "font-size": "17px",
+        "padding-top": "16.5px",
+        "padding-bottom": "16.5px",
+        "border-radius": "40px",
+        "padding-left": "49px",
+        "padding-right": "49px"
+      },
+      "quantityInput": {
+        "font-size": "17px",
+        "padding-top": "16.5px",
+        "padding-bottom": "16.5px"
+      },
+      "price": {
+        "font-size": "18px"
+      },
+      "compareAt": {
+        "font-size": "15.299999999999999px"
+      },
+      "unitPrice": {
+        "font-size": "15.299999999999999px"
+      }
+    },
+    "buttonDestination": "checkout",
+    "layout": "horizontal",
+    "contents": {
+      "img": false,
+      "imgWithCarousel": true,
+      "description": true
+    },
+    "width": "100%",
+    "text": {
+      "button": "Buy now"
+    },
+    "googleFonts": [
+      "Lato"
+    ]
+  },
+  "productSet": {
+    "styles": {
+      "products": {
+        "@media (min-width: 601px)": {
+          "margin-left": "-20px"
+        }
+      }
+    }
+  },
+  "modalProduct": {
+    "contents": {
+      "img": false,
+      "imgWithCarousel": true,
+      "button": false,
+      "buttonWithQuantity": true
+    },
+    "styles": {
+      "product": {
+        "@media (min-width: 601px)": {
+          "max-width": "100%",
+          "margin-left": "0px",
+          "margin-bottom": "0px"
+        }
+      },
+      "button": {
+        "font-family": "Lato, sans-serif",
+        "font-weight": "bold",
+        "font-size": "17px",
+        "padding-top": "16.5px",
+        "padding-bottom": "16.5px",
+        "border-radius": "40px",
+        "padding-left": "49px",
+        "padding-right": "49px"
+      },
+      "quantityInput": {
+        "font-size": "17px",
+        "padding-top": "16.5px",
+        "padding-bottom": "16.5px"
+      },
+      "title": {
+        "font-family": "Helvetica Neue, sans-serif",
+        "font-weight": "bold",
+        "font-size": "26px",
+        "color": "#4c4c4c"
+      },
+      "price": {
+        "font-family": "Helvetica Neue, sans-serif",
+        "font-weight": "normal",
+        "font-size": "18px",
+        "color": "#4c4c4c"
+      },
+      "compareAt": {
+        "font-family": "Helvetica Neue, sans-serif",
+        "font-weight": "normal",
+        "font-size": "15.299999999999999px",
+        "color": "#4c4c4c"
+      },
+      "unitPrice": {
+        "font-family": "Helvetica Neue, sans-serif",
+        "font-weight": "normal",
+        "font-size": "15.299999999999999px",
+        "color": "#4c4c4c"
+      }
+    },
+    "googleFonts": [
+      "Lato"
+    ],
+    "text": {
+      "button": "Add to cart"
+    }
+  },
+  "option": {},
+  "cart": {
+    "styles": {
+      "button": {
+        "font-family": "Lato, sans-serif",
+        "font-weight": "bold",
+        "font-size": "17px",
+        "padding-top": "16.5px",
+        "padding-bottom": "16.5px",
+        "border-radius": "40px"
+      }
+    },
+    "text": {
+      "total": "Subtotal",
+      "button": "Checkout"
+    },
+    "googleFonts": [
+      "Lato"
+    ]
+  },
+  "toggle": {
+    "styles": {
+      "toggle": {
+        "font-family": "Lato, sans-serif",
+        "font-weight": "bold"
+      },
+      "count": {
+        "font-size": "17px"
+      }
+    },
+    "googleFonts": [
+      "Lato"
+    ]
+  }
+},
+      });
+    });
+  }
+})();
+/*]]>*/
+</script>
+
+
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBdig0navZd6v-W57ZIaKstQ_M7DushGjw",
+            authDomain: "prime-e6e11.firebaseapp.com",
+            databaseURL: "https://prime-e6e11-default-rtdb.firebaseio.com",
+            projectId: "prime-e6e11",
+            storageBucket: "prime-e6e11.firebasestorage.app",
+            messagingSenderId: "496246501275",
+            appId: "1:496246501275:web:f313ea73269ae51f7ffb3e"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Global variables
+        let currentProduct = null;
+        let allProducts = [];
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let reviewsLimit = 10;
+        let currentReviewRating = 0;
+
+        // DOM Elements
+        const loadingState = document.getElementById('loading-state');
+        const productDetails = document.getElementById('product-details');
+        const productTitle = document.getElementById('product-title');
+        const productRating = document.getElementById('product-rating');
+        const productReviews = document.getElementById('product-reviews');
+        const productPrice = document.getElementById('product-price');
+        const productOriginalPrice = document.getElementById('product-original-price');
+        const productDiscount = document.getElementById('product-discount');
+        const productDescription = document.getElementById('product-description');
+        const productFeatures = document.getElementById('product-features');
+        const fullDescription = document.getElementById('full-description');
+        const mainImage = document.getElementById('main-image');
+        const thumbnailContainer = document.querySelector('.thumbnail-container');
+        const productCategory = document.getElementById('product-category');
+        const productNameBreadcrumb = document.getElementById('product-name-breadcrumb');
+        const productSku = document.getElementById('product-sku');
+        const specCategory = document.getElementById('spec-category');
+        const relatedProductsContainer = document.getElementById('related-products');
+        const cartBadge = document.getElementById('cart-badge');
+        const cartCountFooter = document.getElementById('cart-count-footer');
+        const quantityInput = document.getElementById('quantity');
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+        const buyNowBtn = document.getElementById('buy-now-btn');
+        const averageRating = document.getElementById('average-rating');
+        const averageRatingStars = document.getElementById('average-rating-stars');
+        const totalReviews = document.getElementById('total-reviews');
+        const ratingDistribution = document.getElementById('rating-distribution');
+        const reviewsContainer = document.getElementById('reviews-container');
+        const addReviewBtn = document.getElementById('add-review-btn');
+        const seeMoreReviewsBtn = document.getElementById('see-more-reviews');
+        const reviewModal = document.getElementById('review-modal');
+        const reviewModalClose = document.getElementById('review-modal-close');
+        const reviewFormCancel = document.getElementById('review-form-cancel');
+        const reviewForm = document.getElementById('review-form');
+        const starRating = document.getElementById('star-rating');
+        const reviewComment = document.getElementById('review-comment');
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notification-message');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            loadProductDetails();
+            setupEventListeners();
+            
+            // Mobile menu toggle
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        });
+
+        // Get product ID from URL
+        function getProductIdFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Load product details from Firebase
+        function loadProductDetails() {
+            const productId = getProductIdFromURL();
+            if (!productId) {
+                showError('Luxury piece not found');
+                return;
+            }
+
+            const productsRef = database.ref('products');
+            
+            productsRef.once('value')
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const productsData = snapshot.val();
+                        allProducts = Object.keys(productsData).map(key => ({
+                            key: key,
+                            ...productsData[key]
+                        }));
+                        
+                        // Find the current product
+                        currentProduct = allProducts.find(p => p.key === productId);
+                        
+                        if (currentProduct) {
+                            displayProductDetails();
+                            loadRelatedProducts();
+                            loadReviews();
+                        } else {
+                            showError('Luxury piece not found in our collection');
+                        }
+                    } else {
+                        showError('No luxury pieces available');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error loading product:', error);
+                    showError('Failed to load luxury details');
+                });
+        }
+
+        // Load reviews for the product
+        function loadReviews() {
+            if (!currentProduct) return;
+
+            // Check if product has reviewData in Firebase
+            if (currentProduct.reviewData && Array.isArray(currentProduct.reviewData)) {
+                displayReviews(currentProduct.reviewData);
+            } else {
+                // If no reviews in Firebase, show placeholder
+                displayReviews([]);
+            }
+        }
+
+        // Display reviews
+        function displayReviews(reviews) {
+            const totalReviewsCount = reviews.length;
+            const averageRatingValue = totalReviewsCount > 0 ? 
+                (reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviewsCount).toFixed(1) : 0;
+
+            // Update rating summary
+            averageRating.textContent = averageRatingValue;
+            averageRatingStars.innerHTML = generateStarRating(averageRatingValue);
+            totalReviews.textContent = `Based on ${totalReviewsCount} patron reviews`;
+
+            // Update rating distribution
+            updateRatingDistribution(reviews);
+
+            // Display limited reviews initially
+            const reviewsToShow = reviews.slice(0, reviewsLimit);
+            
+            if (reviews.length === 0) {
+                reviewsContainer.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-gem text-4xl text-gray-600 mb-6"></i>
+                        <h4 class="font-luxury text-xl font-semibold text-primary mb-3">No Reviews Yet</h4>
+                        <p class="text-gray-400">Be the first to share your experience with this luxury piece.</p>
+                    </div>
+                `;
+                seeMoreReviewsBtn.classList.add('hidden');
+            } else {
+                reviewsContainer.innerHTML = reviewsToShow.map(review => `
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="review-user">${review.userName || 'Anonymous Patron'}</div>
+                            <div class="review-date">${formatDate(review.date)}</div>
+                        </div>
+                        <div class="review-rating">
+                            ${generateStarRating(review.rating)}
+                        </div>
+                        <div class="review-comment">
+                            ${review.comment}
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Show "See More" button if there are more reviews to display
+                if (reviews.length > reviewsLimit) {
+                    seeMoreReviewsBtn.classList.remove('hidden');
+                    seeMoreReviewsBtn.textContent = `Discover More Reviews (${reviews.length - reviewsLimit})`;
+                } else {
+                    seeMoreReviewsBtn.classList.add('hidden');
+                }
+            }
+        }
+
+        // Update rating distribution
+        function updateRatingDistribution(reviews) {
+            const ratingCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0};
+            
+            reviews.forEach(review => {
+                const rating = Math.floor(review.rating);
+                if (rating >= 1 && rating <= 5) {
+                    ratingCounts[rating]++;
+                }
+            });
+
+            const total = reviews.length;
+            
+            ratingDistribution.innerHTML = [5, 4, 3, 2, 1].map(rating => {
+                const count = ratingCounts[rating];
+                const percentage = total > 0 ? (count / total) * 100 : 0;
+                
+                return `
+                    <div class="rating-bar">
+                        <div class="rating-label">${rating} star</div>
+                        <div class="rating-progress">
+                            <div class="rating-progress-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="rating-count">${count}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Display product details
+        function displayProductDetails() {
+            // Hide loading, show product details
+            loadingState.classList.add('hidden');
+            productDetails.classList.remove('hidden');
+
+            // Set basic product info
+            productTitle.textContent = currentProduct.name;
+            productNameBreadcrumb.textContent = currentProduct.name;
+            productCategory.textContent = currentProduct.category || 'Exclusive Collection';
+            productSku.textContent = currentProduct.id || currentProduct.key;
+            specCategory.textContent = currentProduct.category || 'Exclusive Collection';
+
+            // Set prices and discount
+            const originalPrice = currentProduct.originalPrice || currentProduct.price * 1.5;
+            const discount = Math.round(((originalPrice - currentProduct.price) / originalPrice) * 100);
+            productPrice.textContent = `₹${currentProduct.price.toLocaleString()}`;
+            productOriginalPrice.textContent = `₹${originalPrice.toLocaleString()}`;
+            productDiscount.textContent = `${discount}% OFF`;
+
+            // Set rating and reviews
+            productRating.innerHTML = generateStarRating(currentProduct.rating || 4.5);
+            productReviews.textContent = `(${currentProduct.reviews || 0} reviews)`;
+
+            // Set description
+            const description = currentProduct.description || 'An exquisite piece of craftsmanship, meticulously designed for those who appreciate the finer things in life. Every detail has been carefully considered to deliver an unparalleled luxury experience.';
+            productDescription.textContent = description;
+            fullDescription.innerHTML = `<p class="text-gray-300 leading-relaxed">${description}</p>`;
+
+            // Set features
+            if (currentProduct.features && Array.isArray(currentProduct.features)) {
+                productFeatures.innerHTML = currentProduct.features.map(feature => 
+                    `<li>${feature}</li>`
+                ).join('');
+            } else {
+                productFeatures.innerHTML = `
+                    <li>Handcrafted by master artisans</li>
+                    <li>Premium materials and finishes</li>
+                    <li>Exclusive limited edition</li>
+                    <li>Certificate of authenticity</li>
+                    <li>White glove delivery service</li>
+                `;
+            }
+
+            // Set images
+            mainImage.src = currentProduct.image;
+            mainImage.alt = currentProduct.name;
+            
+            // Create thumbnails
+            thumbnailContainer.innerHTML = `
+                <img src="${currentProduct.image}" alt="${currentProduct.name}" 
+                     class="thumbnail active" onclick="changeMainImage(this.src, this)">
+            `;
+
+            // Add error handling for images
+            mainImage.onerror = function() {
+                this.src = 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+            };
+        }
+
+        // Load related products
+        function loadRelatedProducts() {
+            if (!currentProduct) return;
+
+            const relatedProducts = allProducts
+                .filter(product => 
+                    product.key !== currentProduct.key && 
+                    product.category === currentProduct.category
+                )
+                .slice(0, 4);
+
+            if (relatedProducts.length === 0) {
+                // If no related products in same category, show other products
+                const otherProducts = allProducts
+                    .filter(product => product.key !== currentProduct.key)
+                    .slice(0, 4);
+                
+                displayRelatedProducts(otherProducts);
+            } else {
+                displayRelatedProducts(relatedProducts);
+            }
+        }
+
+        // Display related products
+        function displayRelatedProducts(products) {
+            relatedProductsContainer.innerHTML = products.map(product => {
+                const discount = product.originalPrice && product.price ? 
+                    Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
+                
+                return `
+                    <div class="product-card cursor-pointer" onclick="viewProduct('${product.key}')">
+                        <div class="relative">
+                            <img src="${product.image}" alt="${product.name}" 
+                                 class="w-full h-48 object-cover">
+                            ${discount > 0 ? `
+                            <div class="absolute top-4 right-4">
+                                <span class="discount-badge">${discount}% OFF</span>
+                            </div>` : ''}
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-luxury font-semibold text-lg mb-2 truncate">${product.name}</h3>
+                            <div class="flex items-center mb-3">
+                                <div class="rating-stars text-sm">
+                                    ${generateStarRating(product.rating || 4.5)}
+                                </div>
+                                <span class="text-gray-400 text-xs ml-2">(${product.reviews || 0})</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-xl font-serif font-bold text-primary">₹${product.price.toLocaleString()}</div>
+                                    ${product.originalPrice ? `
+                                    <div class="text-sm text-gray-400 line-through">₹${product.originalPrice.toLocaleString()}</div>` : ''}
+                                </div>
+                                <button class="add-to-cart-related bg-primary/10 text-primary p-2 rounded-full hover:bg-primary/20 transition-all" data-id="${product.id}" onclick="event.stopPropagation(); addToCart('${product.key}')">
+                                    <i class="fas fa-shopping-cart text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Generate star rating HTML
+        function generateStarRating(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const emptyStars = 5 - Math.ceil(rating);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+
+        // Change main image when thumbnail is clicked
+        function changeMainImage(src, element) {
+            mainImage.src = src;
+            // Update active thumbnail
+            document.querySelectorAll('.thumbnail').forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+
+        // View product details
+        function viewProduct(productKey) {
+            window.location.href = `product-detail.html?id=${productKey}`;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update active tab button
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update active tab content
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+
+            // Quantity controls
+            document.getElementById('decrease-qty').addEventListener('click', () => {
+                const currentQty = parseInt(quantityInput.value);
+                if (currentQty > 1) {
+                    quantityInput.value = currentQty - 1;
+                }
+            });
+
+            document.getElementById('increase-qty').addEventListener('click', () => {
+                const currentQty = parseInt(quantityInput.value);
+                if (currentQty < 10) {
+                    quantityInput.value = currentQty + 1;
+                }
+            });
+
+            // Add to cart
+            addToCartBtn.addEventListener('click', addToCart);
+
+            // Buy now
+            buyNowBtn.addEventListener('click', buyNow);
+
+            // Add review button
+            addReviewBtn.addEventListener('click', openReviewModal);
+
+            // See more reviews button
+            seeMoreReviewsBtn.addEventListener('click', loadMoreReviews);
+
+            // Review modal events
+            reviewModalClose.addEventListener('click', closeReviewModal);
+            reviewFormCancel.addEventListener('click', closeReviewModal);
+            reviewForm.addEventListener('submit', submitReview);
+
+            // Star rating selection
+            starRating.querySelectorAll('.star').forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    setStarRating(rating);
+                });
+            });
+
+            // Close modal on outside click
+            reviewModal.addEventListener('click', (e) => {
+                if (e.target === reviewModal) {
+                    closeReviewModal();
+                }
+            });
+        }
+
+        // Open review modal
+        function openReviewModal() {
+            reviewModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close review modal
+        function closeReviewModal() {
+            reviewModal.classList.remove('active');
+            document.body.style.overflow = '';
+            resetReviewForm();
+        }
+
+        // Reset review form
+        function resetReviewForm() {
+            setStarRating(0);
+            reviewComment.value = '';
+        }
+
+        // Set star rating
+        function setStarRating(rating) {
+            currentReviewRating = rating;
+            const stars = starRating.querySelectorAll('.star');
+            
+            stars.forEach((star, index) => {
+                const starIcon = star.querySelector('i');
+                if (index < rating) {
+                    star.classList.add('active');
+                    starIcon.className = 'fas fa-star';
+                } else {
+                    star.classList.remove('active');
+                    starIcon.className = 'far fa-star';
+                }
+            });
+        }
+
+        // Submit review
+        function submitReview(event) {
+            event.preventDefault();
+            
+            if (currentReviewRating === 0) {
+                showNotification('Please select a rating', 'error');
+                return;
+            }
+            
+            if (!reviewComment.value.trim()) {
+                showNotification('Please share your thoughts', 'error');
+                return;
+            }
+            
+            const reviewData = {
+                userName: 'Luxury Patron',
+                rating: currentReviewRating,
+                comment: reviewComment.value.trim(),
+                date: new Date().toISOString()
+            };
+            
+            // In a real app, this would save to Firebase
+            showNotification('Thank you for sharing your experience! Your review will be visible soon.', 'success');
+            closeReviewModal();
+            
+            // Simulate adding the review locally
+            if (currentProduct.reviewData) {
+                currentProduct.reviewData.push(reviewData);
+            } else {
+                currentProduct.reviewData = [reviewData];
+            }
+            
+            // Update reviews count
+            currentProduct.reviews = (currentProduct.reviews || 0) + 1;
+            
+            // Reload reviews to show the new one
+            loadReviews();
+        }
+
+        // Load more reviews
+        function loadMoreReviews() {
+            reviewsLimit += 20;
+            loadReviews();
+        }
+
+        // Add to cart function
+        function addToCart(productKey = null, quantity = null) {
+            const productToAdd = productKey ? allProducts.find(p => p.key === productKey) : currentProduct;
+            if (!productToAdd) return;
+
+            const qty = quantity || parseInt(quantityInput.value);
+            const existingItem = cart.find(item => item.key === productToAdd.key);
+
+            if (existingItem) {
+                existingItem.quantity += qty;
+            } else {
+                cart.push({
+                    key: productToAdd.key,
+                    id: productToAdd.id,
+                    name: productToAdd.name,
+                    price: productToAdd.price,
+                    image: productToAdd.image,
+                    quantity: qty
+                });
+            }
+
+            // Save to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Update UI
+            updateCartCount();
+            showNotification(`${productToAdd.name} added to your collection`);
+            
+            // Add loading state to button
+            if (!productKey) {
+                const originalText = addToCartBtn.innerHTML;
+                addToCartBtn.innerHTML = '<div class="spinner mx-auto" style="width: 20px; height: 20px; border-width: 2px;"></div>';
+                addToCartBtn.disabled = true;
+                
+                setTimeout(() => {
+                    addToCartBtn.innerHTML = originalText;
+                    addToCartBtn.disabled = false;
+                }, 1000);
+            }
+        }
+
+        // Buy now function
+        function buyNow() {
+            addToCart();
+            // Redirect to checkout page
+            setTimeout(() => {
+                window.location.href = 'cart.html';
+            }, 1000);
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            if (cartBadge) {
+                cartBadge.textContent = totalItems;
+                cartBadge.classList.add('pulse');
+                setTimeout(() => {
+                    cartBadge.classList.remove('pulse');
+                }, 500);
+            }
+            if (cartCountFooter) {
+                cartCountFooter.textContent = totalItems;
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            if (notification && notificationMessage) {
+                notificationMessage.textContent = message;
+                
+                // Set icon based on type
+                const icon = notification.querySelector('i');
+                if (type === 'error') {
+                    icon.className = 'fas fa-exclamation-circle text-red-400 text-xl';
+                } else {
+                    icon.className = 'fas fa-check-circle text-green-400 text-xl';
+                }
+                
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Show error
+        function showError(message) {
+            loadingState.innerHTML = `
+                <div class="text-center py-12">
+                    <i class="fas fa-gem text-4xl text-primary/50 mb-6"></i>
+                    <h3 class="text-2xl font-luxury font-bold text-white mb-4">${message}</h3>
+                    <p class="text-gray-400 mb-6">We apologize for the inconvenience.</p>
+                    <button onclick="window.location.href='index.html'" 
+                            class="btn-primary">
+                        Return to Collections
+                    </button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>                   
